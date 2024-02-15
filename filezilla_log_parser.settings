@@ -1,0 +1,26 @@
+<?php
+
+// Use https://t.me/myidbot > /getgroupid@myidbot for Telegram groups
+$chatID   = '';
+
+// Take BotToken from https://t.me/BotFather
+$botToken = 'xxxxxxx:xxxxxxxxxxxxxxxxxx-xxxxxxx';
+
+// Exteranl web-server for files (Yandex Disk, Google Drive and etc.)
+// paste shared access url
+$http_url = 'https://disk.yandex.ru/';
+
+// Set full FTP path for files
+$ftp_root = "C:\\Users\\user\\YandexDisk-user\\Folder";
+
+// Set unique subfolder, which set up yours video recorder
+$ftp_root_sub = '/192.168.0.36_001241aa67dd/';
+
+// Set FTP user name
+$ftp_user_name  = 'video';
+
+// Set path to FileZilla logs (setup FileZila Options / Logging - Use a different logfile each day, without size limit)
+$fz_logs_folder = "C:\\Program Files (x86)\\FileZilla Server\\Logs";
+
+// script data file
+$fz_log_id_file = 'filezilla_log_id.save';
