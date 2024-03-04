@@ -50,6 +50,14 @@ for ($i = 0; $i < count($logs); $i++) {
     }
 }
 
+// Reset last log id after FileZilla restart
+if ( ($ses_last_id - $ses_id) > $ftp_log_id_diff )
+{
+	echo 'Reset log id'.PHP_EOL;
+	file_put_contents($filezilla_log_id, $ses_id);
+	return;
+}
+
 //print_r($ses_data);
 $TG = new telegram\TGapi($botToken, $chatID);
 
