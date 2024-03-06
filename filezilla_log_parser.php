@@ -17,11 +17,20 @@ $logs = file($fz_log_last, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
 // get last FilzeZilla ftp session id
 $ses_last_id = @file_get_contents($fz_log_id_file);
 $ses_data = [];
-
+$ses_id_prev = 0;
+	
 for ($i = 0; $i < count($logs); $i++) {
+
     $s = explode(' ', str_replace(['(', ')', '"'], '', $logs[$i]));
     $ses_id = intval($s[0]);
-// skip wrong users and old ftp sessions
+
+    // reset data after log ID reset
+    if( $ses_id < $ses_id_prev )
+    {
+	$ses_data = [];
+    }
+	
+    // skip wrong users and old ftp sessions
     if (( $s[4] != $ftp_user_name ) or ( $ses_id <= $ses_last_id )) {
         continue;
     }
@@ -48,14 +57,8 @@ for ($i = 0; $i < count($logs); $i++) {
             }
         }
     }
-}
 
-// Reset last log id after FileZilla restart
-if ( ($ses_last_id - $ses_id) > $ftp_log_id_diff )
-{
-	echo 'Reset log id'.PHP_EOL;
-	file_put_contents($filezilla_log_id, $ses_id);
-	return;
+    $ses_id_prev = $ses_id;
 }
 
 //print_r($ses_data);
