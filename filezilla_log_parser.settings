@@ -24,6 +24,3 @@ $fz_logs_folder = "C:\\Program Files (x86)\\FileZilla Server\\Logs";
 
 // script data file
 $fz_log_id_file = 'filezilla_log_id.save';
-
-// FileZilla log ids diff - for recovery after FTP server restart
-$ftp_log_id_diff = 10;
