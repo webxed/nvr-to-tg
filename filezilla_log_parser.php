@@ -34,7 +34,7 @@ for ( $i = 0; $i < count($logs); $i++ ) {
 
     $s = explode(' ', str_replace(['(', ')', '"'], '', $logs[$i]));
 
-   // skip wrong users
+   // skip wrong FTP user name
    if( ( isset($s[4]) and $s[4] != $ftp_user_name ) ) {
         continue;
    }
@@ -47,7 +47,7 @@ for ( $i = 0; $i < count($logs); $i++ ) {
    $ses_ts = strtotime($s[1].' '.$s[2]);
    
    // test timestamp
-   if( $ses_ts == false ) {
+   if( $ses_ts === false ) {
        continue;
    }
    
@@ -69,12 +69,11 @@ for ( $i = 0; $i < count($logs); $i++ ) {
         $pi = pathinfo($s[9]);
         if (isset($pi['extension'])) {
             switch ($pi['extension']) {
-                // Uploaded Screenshots
+                // uploaded screenshots files
                 case 'jpg':
                         $ses_data[$ses_id][] = [ 'type' => 'photo', 'file' => $s[9], 'capt' => $ses_id.'-'.$pi['filename'] ];
-
                     break;
-                // Uploaded Videos
+                // uploaded videos files
                 case 'h264':
                         $ses_data[$ses_id][] = [ 'type' => 'url',   'file' => $s[9] ];
                     break;
@@ -83,14 +82,16 @@ for ( $i = 0; $i < count($logs); $i++ ) {
     }
 }
 
-// send Telegram messages block
+//print_r($ses_data);
+
+// send Telegram messages
 $TG = new telegram\TGapi($botToken, $chatID);
 
 $send_urls = [];
 $ses_ts = 0;
 
 foreach ($ses_data as $sk => $sd) {
-    // send message to Telegram only about closed ftp server sessions
+    // send message to Telegram use only closed FTP server sessions
     if (isset($sd['CLOSED'])) {
         foreach ($sd as $f) {
             if (is_array($f)) {
@@ -98,17 +99,15 @@ foreach ($ses_data as $sk => $sd) {
                     case 'photo':
                         $TG->sendPhoto($ftp_root . $f['file'], $f['capt']);
                         break;
-                    // combine message about video files to one message
+                    // combine URLs to video files to one message
                     case 'url':
                         $send_urls[] = $http_url . str_replace($ftp_root_sub, '', $f['file']);
                         break;
                 }
-
                 echo PHP_EOL;
             }
         }
-
-        // save last ftp session id
+        // save last FTP timestamp
         $ses_ts = $sd['CLOSED'];
     }
 }
