@@ -138,7 +138,7 @@ class TGapi extends MyCURL
 
         $post_fields = [
             'chat_id'   => self::$chatID,
-            'photo'     => new CURLFile($photo_file),
+            'photo'     => new \CURLFile($photo_file),
         ];
 
         if (!empty($caption)) {
