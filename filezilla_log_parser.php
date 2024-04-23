@@ -61,7 +61,7 @@ for ( $i = 0; $i < count($logs); $i++ ) {
 
     // mark disconnected session
    if (isset($s[6]) && $s[6] == "disconnected.") {
-       $ses_data[$ses_id]['CLOSED'] = true;
+       $ses_data[$ses_id]['CLOSED'] = $ses_ts;
    }
 
     // file transferred
